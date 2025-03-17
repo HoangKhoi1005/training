@@ -13,20 +13,43 @@ void main() {
   } catch (e, s) {
     print(e);
     if (e is ArgumentError) {
-      ///
+      /// Show dialog....
     }
   }
-
 
 
   try {
     final result = divide(a, b);
     print('Result $result');
-  } catch (e, s) {
+  } on ArgumentError catch (e, s) {
     print(e);
     if (e is ArgumentError) {
-      ///
+      /// Show dialog....
     }
+  }
+
+
+
+
+  try {
+    /// Show loading
+    final result = divide(a, b);
+    print('Result $result');
+  } finally {
+    /// Hide loading
+  }
+
+  try {
+    /// Show loading
+    final result = divide(a, b);
+    print('Result $result');
+  } on ArgumentError catch (e, s) {
+    /// Hide loading
+    /// Show error message dialog
+  } catch (e, s) {
+    /// Hide loading
+    print(e);
+    print(s);
   }
 }
 
