@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isActive = false;
 
-  List<String> list = ['fdsfsdfds','sdf','fsdfdsfsdgbdbwebweebweb'];
+  List<String> list = ['fdsfsdfds', 'sdf', 'fsdfdsfsdgbdbwebweebweb'];
   int index = 0;
 
   void onChanged(bool? value) {
@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void randomTitle() {
-    if(list.isEmpty) return;
+    if (list.isEmpty) return;
     setState(() {
       int newIndex;
       do {
