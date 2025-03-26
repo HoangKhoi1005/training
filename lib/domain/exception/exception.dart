@@ -7,3 +7,14 @@ sealed class DomainException implements Exception {
 
   final String message;
 }
+
+class RepositoryException implements Exception {
+  const RepositoryException({
+    required this.statusCode,
+    required this.message,
+  });
+
+  final int statusCode;
+
+  final String message;
+}
