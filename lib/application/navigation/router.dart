@@ -6,6 +6,15 @@ final $router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) {
+        return LoginScreen();
+      },
+      routes: [
+        ///
+      ],
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) {
         return HomeScreen();
       },
       routes: [
