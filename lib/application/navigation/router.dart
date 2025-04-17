@@ -38,6 +38,18 @@ final $router = GoRouter(
         ),
       ],
     ),
+    GoRoute(
+      path: '/forgot-password',
+      builder: (context, state) {
+        return ForgotPasswordScreen();
+      },
+    ),
+    GoRoute(
+      path: '/sign-up',
+      builder: (context, state) {
+        return SignUpScreen();
+      },
+    ),
 
     ///
   ],

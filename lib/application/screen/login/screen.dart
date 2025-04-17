@@ -43,6 +43,18 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void onForgotPassword() {
+    final location = '/forgot-password';
+    final router = GoRouter.of(context);
+    router.push(location);
+  }
+
+  void onSignUp(){
+    final location = '/sign-up';
+    final router = GoRouter.of(context);
+    router.push(location);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -55,86 +67,137 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Form(
         key: _formKey,
         child: Scaffold(
-          body: Column(
-            children: [
-              const SizedBox(height: 100),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 44,
-                  horizontal: 44,
-                ),
-                child: Image.asset(
-                  AssetImage.loginBanner,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: TextFormField(
-                  controller: phoneController,
-                  decoration: InputDecoration(
-                    labelText: 'Numéro de téléphone',
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 100),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 44,
+                    horizontal: 44,
                   ),
-                  keyboardType: TextInputType.phone,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer un numéro de téléphone';
-                    }
-                    if (!RegExp(r'^\+?[0-9]{10,15}$').hasMatch(value)) {
-                      return 'Veuillez entrer un numéro de téléphone valide';
-                    }
-                    return null;
-                  },
+                  child: Image.asset(
+                    AssetImage.loginBanner,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: TextFormField(
-                  controller: passwordController,
-                  obscureText: obscureText,
-                  decoration: InputDecoration(
-                    labelText: 'Mot de passe',
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: colorScheme.primary)),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        color: colorScheme.primary,
-                        obscureText ? Icons.visibility_off : Icons.visibility,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          obscureText = !obscureText;
-                        });
-                      },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: TextFormField(
+                    controller: phoneController,
+                    decoration: InputDecoration(
+                      labelText: 'Numéro de téléphone',
                     ),
+                    keyboardType: TextInputType.phone,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Veuillez entrer un numéro de téléphone';
+                      }
+                      if (!RegExp(r'^\+?[0-9]{10,15}$').hasMatch(value)) {
+                        return 'Veuillez entrer un numéro de téléphone valide';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer un mot de passe';
-                    }
-                    if (value.length < 6) {
-                      return 'Le mot de passe doit comporter au moins 6 caractères';
-                    }
-                    return null;
-                  },
                 ),
-              ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(
-                        double.infinity,
-                        48,
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: TextFormField(
+                    controller: passwordController,
+                    obscureText: obscureText,
+                    decoration: InputDecoration(
+                      labelText: 'Mot de passe',
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: colorScheme.primary)),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          color: colorScheme.primary,
+                          obscureText ? Icons.visibility_off : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            obscureText = !obscureText;
+                          });
+                        },
                       ),
                     ),
-                    onPressed: onLogin,
-                    child: Text(
-                      'Connexion',
-                    )),
-              ),
-            ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Veuillez entrer un mot de passe';
+                      }
+                      if (value.length < 6) {
+                        return 'Le mot de passe doit comporter au moins 6 caractères';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(
+                          double.infinity,
+                          48,
+                        ),
+                      ),
+                      onPressed: onLogin,
+                      child: Text(
+                        'Connexion',
+                      )),
+                ),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: onForgotPassword,
+                      child: Text(
+                        'Mot de passe oublié ?',
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                      )
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 56),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 56),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Vous n’avez pas encore de compte ?',
+                        style: TextStyle(
+                          fontSize: 17,
+                        ),
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: onSignUp,
+                        child: Text(
+                          'Inscrivez-vous',
+                          style: TextStyle(
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

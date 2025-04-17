@@ -10,6 +10,8 @@ part 'navigation/router.dart';
 part 'screen/account/screen.dart';
 part 'screen/home/screen.dart';
 part 'screen/login/screen.dart';
+part 'screen/forgot_password/screen.dart';
+part 'screen/sign_up/screen.dart';
 
 part 'asset.dart';
 part 'presenter.dart';

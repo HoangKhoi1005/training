@@ -23,4 +23,15 @@ final class UserRepositoryImpl extends UserRepository {
       return user;
     });
   }
+
+  @override
+  Future<User> signUp({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String password,
+  }) {
+    // TODO: implement signUp
+    throw UnimplementedError();
+  }
 }
