@@ -1,7 +1,18 @@
 part of application;
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  const SignUpScreen({
+    super.key,
+    this.email,
+    this.firstName,
+    this.lastName,
+  });
+
+  final String? firstName;
+
+  final String? lastName;
+
+  final String? email;
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -25,9 +36,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
         final lastName = lastNameController.text;
         final email = emailController.text;
         final password = passwordController.text;
-
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    firstNameController.text = widget.firstName ?? '';
+    lastNameController.text = widget.lastName ?? '';
+    emailController.text = widget.email ?? '';
   }
 
   @override
@@ -60,6 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: TextFormField(
+                    controller: firstNameController,
                     decoration: InputDecoration(
                       labelText: 'Prénom',
                     ),
@@ -75,6 +94,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: TextFormField(
+                    controller: lastNameController,
                     decoration: InputDecoration(
                       labelText: 'Nom',
                     ),
@@ -90,6 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: TextFormField(
+                    controller: emailController,
                     decoration: InputDecoration(
                       labelText: 'Adresse e-mail',
                     ),
@@ -98,7 +119,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Veuillez entrer une adresse e-mail';
                       }
-                      if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                      if (!RegExp(
+                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                           .hasMatch(value)) {
                         return 'Veuillez entrer une adresse e-mail valide';
                       }
@@ -114,9 +136,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       labelText: 'Mot de passe',
                       suffixIcon: IconButton(
                         icon: Icon(
-                          obscureText
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                          obscureText ? Icons.visibility_off : Icons.visibility,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                         onPressed: () {

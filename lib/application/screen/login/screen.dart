@@ -44,15 +44,23 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onForgotPassword() {
-    final location = '/forgot-password';
-    final router = GoRouter.of(context);
-    router.push(location);
+    // final location = '/forgot-password';
+    // final router = GoRouter.of(context);
+    // router.push(location);
+    const route = ForgotPasswordRoute();
+    route.push(context);
   }
 
-  void onSignUp(){
-    final location = '/sign-up';
-    final router = GoRouter.of(context);
-    router.push(location);
+  void onSignUp() {
+    // final location = '/sign-up?phone=${phoneController.text}';
+    // final router = GoRouter.of(context);
+    // router.push(location);
+    final route = SignUpRoute(
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      email: 'email@domain.com.vn',
+    );
+    route.push(context);
   }
 
   @override
@@ -153,19 +161,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextButton(
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      onPressed: onForgotPassword,
-                      child: Text(
-                        'Mot de passe oublié ?',
-                        style: TextStyle(
-                          fontSize: 14,
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
-                      )
-                    ),
+                        onPressed: onForgotPassword,
+                        child: Text(
+                          'Mot de passe oublié ?',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        )),
                   ),
                 ),
                 const SizedBox(height: 56),

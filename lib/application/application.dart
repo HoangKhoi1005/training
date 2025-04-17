@@ -5,6 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:training/data/data.dart';
 import 'package:training/domain/domain.dart';
 
+part 'application.g.dart';
+
+part 'navigation/dashboard.dart';
+part 'navigation/onboarding.dart';
 part 'navigation/router.dart';
 
 part 'screen/account/screen.dart';

@@ -19,9 +19,11 @@ class _AccountScreenState extends State<AccountScreen> {
         minimum: EdgeInsets.all(16),
         child: ElevatedButton(
           onPressed: () {
-            final router = GoRouter.of(context);
-            final location = '/';
-            router.push(location);
+            // final router = GoRouter.of(context);
+            // final location = '/';
+            // router.push(location);
+            const route = HomeRoute();
+            route.push(context);
           },
           child: Text('Go to Home'),
         ),
