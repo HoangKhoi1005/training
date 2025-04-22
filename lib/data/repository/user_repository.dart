@@ -8,24 +8,20 @@ final class UserRepositoryImpl extends UserRepository {
   final UserService userService;
 
   @override
-  Future<User> login({
+  Future<String> login({
     required String userName,
     required String password,
   }) {
     return userService
         .login(userName: userName, password: password)
         .then((dto) {
-      final user = User(
-        fullName: dto.user.name,
-        dob: null,
-        phoneNo: dto.user.phone,
-      );
-      return user;
+      final token = dto.token;
+      return token;
     });
   }
 
   @override
-  Future<User> signUp({
+  Future<String> signUp({
     required String firstName,
     required String lastName,
     required String email,
@@ -33,5 +29,17 @@ final class UserRepositoryImpl extends UserRepository {
   }) {
     // TODO: implement signUp
     throw UnimplementedError();
+  }
+
+  @override
+  Future<User> getUser({required String token}) {
+    return userService.getAccountInfo(token: token).then((dto) {
+      final user = dto.user;
+      final fullName = user.name;
+      final dob = null;
+      final phoneNo = user.phone;
+      final result = User(fullName: fullName, dob: dob, phoneNo: phoneNo);
+      return result;
+    });
   }
 }

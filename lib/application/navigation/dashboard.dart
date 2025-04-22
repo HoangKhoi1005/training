@@ -13,9 +13,10 @@ class HomeRoute extends GoRouteData {
 
   @override
   Future<String?> redirect(BuildContext context, GoRouterState state) async {
-    final isLoggedIn = false; // Replace with your actual login check
+    final manager = ApplicationManager();
+    final isValidToken = manager.isValidToken;
 
-    if (!isLoggedIn) {
+    if (!isValidToken) {
       final location = LoginRoute().location;
       return location;
     }

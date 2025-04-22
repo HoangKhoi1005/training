@@ -11,6 +11,7 @@ part 'data.g.dart';
 
 part 'repository/user_repository.dart';
 
+part 'service/user/dto/account_info.dart';
 part 'service/user/dto/login.dart';
 part 'service/user/config.dart';
 part 'service/user/service.dart';

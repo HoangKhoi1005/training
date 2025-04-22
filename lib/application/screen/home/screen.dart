@@ -10,9 +10,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final manager = ApplicationManager();
+    final user = manager.user;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text('Xin chào ${user?.fullName ?? 'bạn'}'),
       ),
       body: Placeholder(),
       bottomNavigationBar: SafeArea(

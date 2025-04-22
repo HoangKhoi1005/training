@@ -1,5 +1,7 @@
 library application;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:training/data/data.dart';
@@ -18,7 +20,7 @@ part 'screen/forgot_password/screen.dart';
 part 'screen/sign_up/screen.dart';
 
 part 'asset.dart';
-part 'presenter.dart';
+part 'manager.dart';
 
 class Application extends StatelessWidget {
   const Application({super.key});

@@ -7,6 +7,17 @@ class LoginRoute extends GoRouteData {
   const LoginRoute();
 
   @override
+  FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
+    final manager = ApplicationManager();
+    final isValidToken = manager.isValidToken;
+    if (isValidToken) {
+      final location = HomeRoute().location;
+      return location;
+    }
+    return null;
+  }
+
+  @override
   Widget build(BuildContext context, GoRouterState state) {
     return const LoginScreen();
   }

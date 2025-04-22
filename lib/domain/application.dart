@@ -5,4 +5,6 @@ abstract class MyApplication {
 
   ///
   Future<String> updateNewPassword();
+
+  Future logout();
 }

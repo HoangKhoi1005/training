@@ -45,4 +45,40 @@ final class UserService {
       );
     }
   }
+
+  Future<UserServiceAccountInfoDTO> getAccountInfo({
+    required String token,
+  }) async {
+    final host = config.host;
+    final uri = Uri.parse(
+      'https://$host/api/v1/saladin-user/user/account/info',
+    );
+    final Map<String, String> headers = {
+      'Authorization': 'Bearer $token',
+    };
+    final response = await http.get(uri, headers: headers);
+    final statusCode = response.statusCode;
+    if (statusCode >= 200 && statusCode <= 299) {
+      // Success
+      final responseBody = response.body;
+      final json = jsonDecode(responseBody);
+      if (json is Map<String, dynamic>) {
+        final dto = UserServiceAccountInfoDTO.fromJson(json);
+        return dto;
+      } else {
+        throw RepositoryException(
+          statusCode: -1,
+          message: 'Dữ liệu không hợp lệ',
+        );
+      }
+    } else {
+      // Failed
+      final reason = response.reasonPhrase;
+      final message = reason ?? 'Đã có lỗi xảy ra';
+      throw RepositoryException(
+        statusCode: statusCode,
+        message: message,
+      );
+    }
+  }
 }

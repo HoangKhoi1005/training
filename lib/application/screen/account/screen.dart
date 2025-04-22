@@ -18,14 +18,17 @@ class _AccountScreenState extends State<AccountScreen> {
       bottomNavigationBar: SafeArea(
         minimum: EdgeInsets.all(16),
         child: ElevatedButton(
-          onPressed: () {
-            // final router = GoRouter.of(context);
-            // final location = '/';
-            // router.push(location);
-            const route = HomeRoute();
-            route.push(context);
+          onPressed: () async {
+            void goToLogin() {
+              final route = LoginRoute();
+              route.go(context);
+            }
+
+            final manager = ApplicationManager();
+            await manager.logout();
+            goToLogin();
           },
-          child: Text('Go to Home'),
+          child: Text('Logout'),
         ),
       ),
     );

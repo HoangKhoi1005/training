@@ -9,7 +9,7 @@ final class Login with ValidateUserName, ValidatePassword {
   final UserRepository userRepository;
   final MyApplication myApplication;
 
-  Future<User> call({
+  Future<String> call({
     required String userName,
     required String password,
     int count = 0,
@@ -33,13 +33,12 @@ final class Login with ValidateUserName, ValidatePassword {
         );
       }
 
-      /// Gọi đến REPOSITORY để lấy dữ liệu
-      final user = await userRepository.login(
+      // /// Gọi đến REPOSITORY để lấy dữ liệu
+      final token = await userRepository.login(
         userName: userName,
         password: password,
       );
-
-      return user;
+      return token;
     } on ExpiredPasswordException catch (e, s) {
       if (count > 1) {
         rethrow;

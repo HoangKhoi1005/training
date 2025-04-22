@@ -8,9 +8,13 @@ final class UserServiceLoginDTO {
 
   const UserServiceLoginDTO({
     required this.user,
+    required this.token,
   });
 
   final UserServiceLoginDTOUser user;
+
+  @JsonKey(name: 'token')
+  final String token;
 }
 
 @JsonSerializable()

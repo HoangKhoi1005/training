@@ -17,16 +17,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final userServiceConfig = DevUserServiceConfig();
   late final userService = UserService(config: userServiceConfig);
   late final userRepository = UserRepositoryImpl(userService: userService);
-  late final presenter = Presenter();
+  late final manager = ApplicationManager();
   late final login = Login(
     userRepository: userRepository,
-    myApplication: presenter,
+    myApplication: manager,
   );
 
   void goHome(User user) {
-    final location = '/home';
-    final router = GoRouter.of(context);
-    router.go(location);
+    final route = HomeRoute();
+    route.go(context);
   }
 
   void onLogin() async {
@@ -37,7 +36,10 @@ class _LoginScreenState extends State<LoginScreen> {
         formState.save();
         final phone = phoneController.text;
         final password = passwordController.text;
-        final user = await login(userName: phone, password: password);
+        final token = await login(userName: phone, password: password);
+        final manager = ApplicationManager();
+        manager.token = token;
+        final user = await manager.getProfile();
         goHome(user);
       }
     }
