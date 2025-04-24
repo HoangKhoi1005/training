@@ -26,7 +26,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
             final manager = ApplicationManager();
             await manager.logout();
-            goToLogin();
+            // goToLogin();
           },
           child: Text('Logout'),
         ),

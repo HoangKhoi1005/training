@@ -1,6 +1,6 @@
 part of application;
 
-final class ApplicationManager extends MyApplication {
+final class ApplicationManager extends ChangeNotifier implements MyApplication {
   /// Singleton instance of ApplicationManager
   static final ApplicationManager _instance = ApplicationManager._internal();
 
@@ -17,11 +17,13 @@ final class ApplicationManager extends MyApplication {
   }
 
   String _token = '';
+  final tokenNotifier = ValueNotifier<String>('');
   String get token => _token;
   set token(String value) {
     if (value.isEmpty) {
       _token = '';
       _user = null;
+      notifyListeners();
     } else if (value.length < 10) {
       throw Exception('Token is too short');
     } else if (value == _token) {
@@ -29,6 +31,7 @@ final class ApplicationManager extends MyApplication {
     } else if (_token != value) {
       _token = value;
       getProfile();
+      notifyListeners();
     }
   }
 
@@ -66,4 +69,6 @@ final class ApplicationManager extends MyApplication {
   Future logout() async {
     token = '';
   }
+
+  final favoriteButtonNotifier = ValueNotifier(true);
 }
