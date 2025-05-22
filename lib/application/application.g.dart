@@ -21,6 +21,10 @@ RouteBase get $homeRoute => GoRouteData.$route(
           path: 'account',
           factory: $AccountRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'tools/:toolName',
+          factory: $StoreListRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -46,6 +50,25 @@ extension $AccountRouteExtension on AccountRoute {
 
   String get location => GoRouteData.$location(
         '/account',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $StoreListRouteExtension on StoreListRoute {
+  static StoreListRoute _fromState(GoRouterState state) => StoreListRoute(
+        toolName: state.pathParameters['toolName']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tools/${Uri.encodeComponent(toolName)}',
       );
 
   void go(BuildContext context) => context.go(location);

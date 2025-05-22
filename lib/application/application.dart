@@ -14,10 +14,14 @@ part 'navigation/onboarding.dart';
 part 'navigation/router.dart';
 
 part 'screen/account/screen.dart';
+part 'screen/home/widget/tool_card.dart';
 part 'screen/home/screen.dart';
 part 'screen/login/screen.dart';
 part 'screen/forgot_password/screen.dart';
 part 'screen/sign_up/screen.dart';
+part 'screen/store_list/widget/category_helper.dart';
+part 'screen/store_list/widget/store_card.dart';
+part 'screen/store_list/screen.dart';
 
 part 'asset.dart';
 part 'manager.dart';
@@ -33,6 +37,7 @@ class Application extends StatelessWidget {
     return MaterialApp.router(
       title: 'Training',
       theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFFE2E7EA),
         colorScheme: colorScheme,
         useMaterial3: true,
         inputDecorationTheme: InputDecorationTheme(

@@ -6,6 +6,9 @@ part of application;
     TypedGoRoute<AccountRoute>(
       path: 'account',
     ),
+    TypedGoRoute<StoreListRoute>(
+      path: 'tools/:toolName',
+    )
   ],
 )
 class HomeRoute extends GoRouteData {
@@ -36,5 +39,17 @@ class AccountRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const AccountScreen();
+  }
+}
+
+class StoreListRoute extends GoRouteData {
+  final String toolName;
+
+  const StoreListRoute({required this.toolName});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    // TODO: implement build
+    return StoreListScreen(toolName: toolName);
   }
 }
