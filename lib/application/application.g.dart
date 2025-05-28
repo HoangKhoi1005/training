@@ -25,6 +25,14 @@ RouteBase get $homeRoute => GoRouteData.$route(
           path: 'tools/:toolName',
           factory: $StoreListRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'tools/:toolName/prix/stores/:storeId',
+          factory: $StorePrixDetailRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'tools/:toolName/rupture/stores/:storeId',
+          factory: $StoreRuptureDetailRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -69,6 +77,48 @@ extension $StoreListRouteExtension on StoreListRoute {
 
   String get location => GoRouteData.$location(
         '/tools/${Uri.encodeComponent(toolName)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $StorePrixDetailRouteExtension on StorePrixDetailRoute {
+  static StorePrixDetailRoute _fromState(GoRouterState state) =>
+      StorePrixDetailRoute(
+        storeId: int.parse(state.pathParameters['storeId']!)!,
+        toolName: state.pathParameters['toolName']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tools/${Uri.encodeComponent(toolName)}/prix/stores/${Uri.encodeComponent(storeId.toString())}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $StoreRuptureDetailRouteExtension on StoreRuptureDetailRoute {
+  static StoreRuptureDetailRoute _fromState(GoRouterState state) =>
+      StoreRuptureDetailRoute(
+        storeId: int.parse(state.pathParameters['storeId']!)!,
+        toolName: state.pathParameters['toolName']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tools/${Uri.encodeComponent(toolName)}/rupture/stores/${Uri.encodeComponent(storeId.toString())}',
       );
 
   void go(BuildContext context) => context.go(location);

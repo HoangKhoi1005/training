@@ -10,6 +10,7 @@ import 'package:training/domain/domain.dart';
 
 part 'data.g.dart';
 
+part 'repository/mission_repository.dart';
 part 'repository/store_repository.dart';
 part 'repository/tool_repository.dart';
 part 'repository/user_repository.dart';

@@ -1,6 +1,7 @@
 part of my_domain;
 
 interface class Store {
+  final int storeId;
   final String name;
   final String logoPath;
   final double distanceKm;
@@ -10,6 +11,7 @@ interface class Store {
   final bool isFavorite;
 
   const Store({
+    required this.storeId,
     required this.name,
     required this.logoPath,
     required this.distanceKm,

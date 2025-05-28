@@ -8,7 +8,13 @@ part of application;
     ),
     TypedGoRoute<StoreListRoute>(
       path: 'tools/:toolName',
-    )
+    ),
+    TypedGoRoute<StorePrixDetailRoute>(
+      path: 'tools/:toolName/prix/stores/:storeId',
+    ),
+    TypedGoRoute<StoreRuptureDetailRoute>(
+      path: 'tools/:toolName/rupture/stores/:storeId',
+    ),
   ],
 )
 class HomeRoute extends GoRouteData {
@@ -51,5 +57,29 @@ class StoreListRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     // TODO: implement build
     return StoreListScreen(toolName: toolName);
+  }
+}
+
+class StorePrixDetailRoute extends GoRouteData {
+  final int storeId;
+  final String toolName;
+
+  const StorePrixDetailRoute({required this.storeId, required this.toolName});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return StorePrixDetail(storeId: storeId, toolName: toolName);
+  }
+}
+
+class StoreRuptureDetailRoute extends GoRouteData {
+  final int storeId;
+  final String toolName;
+
+  const StoreRuptureDetailRoute({required this.storeId, required this.toolName});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return StoreRuptureDetail(storeId: storeId, toolName: toolName);
   }
 }

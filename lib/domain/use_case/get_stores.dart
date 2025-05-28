@@ -8,4 +8,8 @@ final class GetStoresUseCase {
   Future<List<Store>> call(String toolName) {
     return storeRepository.getStores(toolName);
   }
+
+  Future<Store> getStoreById(int storeId) {
+    return storeRepository.getStore(storeId);
+  }
 }

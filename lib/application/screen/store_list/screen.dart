@@ -3,7 +3,7 @@ part of application;
 class StoreListScreen extends StatefulWidget {
   final String toolName;
 
-  const StoreListScreen({required this.toolName});
+  const StoreListScreen({super.key, required this.toolName});
 
   @override
   State<StoreListScreen> createState() => _StoreListScreenState();
@@ -148,6 +148,7 @@ class _StoreListScreenState extends State<StoreListScreen>
           children: [
             StoreCard(
               store: stores[index],
+              toolName: widget.toolName,
               isFavorite: favoriteStores.contains(stores[index]),
               onFavoriteToggle: () {
                 toggleFavorite(stores[index]);
@@ -176,6 +177,7 @@ class _StoreListScreenState extends State<StoreListScreen>
           children: [
             StoreCard(
               store: favoriteStores.elementAt(index),
+              toolName: widget.toolName,
               isFavorite: favoriteStores.contains(favoriteStores.elementAt(index)),
               onFavoriteToggle: () {
                 toggleFavorite(favoriteStores.elementAt(index),);
