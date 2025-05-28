@@ -1,11 +1,17 @@
 part of application;
 
 class StorePrixDetail extends StatefulWidget {
+  final Store? store;
   final int storeId;
   final String toolName;
 
   const StorePrixDetail(
-      {super.key, required this.storeId, required this.toolName});
+      {super.key, required this.storeId, required this.toolName})
+      : store = null;
+
+  StorePrixDetail.store(
+      {super.key, required Store this.store, required this.toolName})
+      : storeId = store.storeId;
 
   @override
   State<StorePrixDetail> createState() => _StorePrixDetailState();
@@ -15,7 +21,7 @@ class _StorePrixDetailState extends State<StorePrixDetail>
     with TickerProviderStateMixin {
   late final GetStoresUseCase getStoresUseCase;
   late final GetMissionsUseCase getMissionsUseCase;
-  late final Store store;
+  late Store store;
   bool loading = true;
   late final TabController _tabController;
   List<Mission> missions = [];
@@ -31,7 +37,8 @@ class _StorePrixDetailState extends State<StorePrixDetail>
   }
 
   Future<void> loadStore() async {
-    final store = await getStoresUseCase.getStoreById(widget.storeId);
+    final store =
+        widget.store ?? await getStoresUseCase.getStoreById(widget.storeId);
     final missions = await getMissionsUseCase.call(store.name, widget.toolName);
     setState(() {
       this.store = store;
@@ -44,6 +51,14 @@ class _StorePrixDetailState extends State<StorePrixDetail>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  void toggleFavorite(Store store) {
+    final isFavorite = store.isFavorite;
+    final changedStore = store.copyWith(isFavorite: !isFavorite);
+    setState(() {
+      this.store = changedStore;
+    });
   }
 
   @override
@@ -64,8 +79,22 @@ class _StorePrixDetailState extends State<StorePrixDetail>
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.favorite_border),
-            onPressed: () {},
+            icon: Icon(
+              store.isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: Colors.purple,
+            ),
+            onPressed: () {
+              toggleFavorite(store);
+              final snackBar = SnackBar(
+                content: Text(
+                  store.isFavorite
+                      ? 'Ajouté aux favoris'
+                      : 'Retiré des favoris',
+                ),
+                duration: const Duration(seconds: 2),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
           ),
         ],
         bottom: PreferredSize(
@@ -79,43 +108,23 @@ class _StorePrixDetailState extends State<StorePrixDetail>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          store.logoPath,
-                          width: 96,
-                          height: 96,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      if (store.notificationCount > 0)
-                        Positioned(
-                          right: -4,
-                          top: -4,
-                          child: Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Text(
-                                '${store.notificationCount}',
-                                style: const TextStyle(
-                                    fontSize: 10, color: Colors.white),
-                              ),
-                            ),
+                  Badge(
+                    label: store.notificationCount <= 0
+                        ? null
+                        : Text(
+                            '${store.notificationCount}',
+                            style: const TextStyle(
+                                fontSize: 10, color: Colors.white),
                           ),
-                        )
-                    ],
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        store.logoPath,
+                        width: 96,
+                        height: 96,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                   SizedBox(width: 16),
                   Expanded(

@@ -61,13 +61,24 @@ class StoreListRoute extends GoRouteData {
 }
 
 class StorePrixDetailRoute extends GoRouteData {
-  final int storeId;
   final String toolName;
 
-  const StorePrixDetailRoute({required this.storeId, required this.toolName});
+  final Store? $extra;
+
+  final int storeId;
+
+  const StorePrixDetailRoute(
+      {required this.$extra, required this.storeId, required this.toolName});
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
+    final store = $extra;
+    if (store != null) {
+      return StorePrixDetail.store(
+        store: store,
+        toolName: toolName,
+      );
+    }
     return StorePrixDetail(storeId: storeId, toolName: toolName);
   }
 }
@@ -76,7 +87,8 @@ class StoreRuptureDetailRoute extends GoRouteData {
   final int storeId;
   final String toolName;
 
-  const StoreRuptureDetailRoute({required this.storeId, required this.toolName});
+  const StoreRuptureDetailRoute(
+      {required this.storeId, required this.toolName});
 
   @override
   Widget build(BuildContext context, GoRouterState state) {

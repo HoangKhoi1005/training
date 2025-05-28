@@ -20,4 +20,26 @@ interface class Store {
     required this.notificationCount,
     required this.isFavorite,
   });
+
+  Store copyWith({
+    int? storeId,
+    String? name,
+    String? logoPath,
+    double? distanceKm,
+    String? address,
+    StoreCategory? category,
+    int? notificationCount,
+    bool? isFavorite,
+  }) {
+    return Store(
+      storeId: storeId ?? this.storeId,
+      name: name ?? this.name,
+      logoPath: logoPath ?? this.logoPath,
+      distanceKm: distanceKm ?? this.distanceKm,
+      address: address ?? this.address,
+      category: category ?? this.category,
+      notificationCount: notificationCount ?? this.notificationCount,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }

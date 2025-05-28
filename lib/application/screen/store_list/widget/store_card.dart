@@ -17,6 +17,7 @@ class StoreCard extends StatelessWidget {
     final name = toolName.toLowerCase();
     if (name.contains('prix')) {
       StorePrixDetailRoute(
+        $extra: store,
         storeId: store.storeId,
         toolName: toolName,
       ).push(context);
@@ -27,8 +28,6 @@ class StoreCard extends StatelessWidget {
       ).push(context);
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +71,8 @@ class StoreCard extends StatelessWidget {
                         ),
                         child: Text(
                           '${store.notificationCount}',
-                          style:
-                              const TextStyle(fontSize: 10, color: Colors.white),
+                          style: const TextStyle(
+                              fontSize: 10, color: Colors.white),
                         ),
                       ),
                     ),

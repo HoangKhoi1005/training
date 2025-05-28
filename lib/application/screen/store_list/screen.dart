@@ -12,8 +12,7 @@ class StoreListScreen extends StatefulWidget {
 class _StoreListScreenState extends State<StoreListScreen>
     with TickerProviderStateMixin {
   late final GetStoresUseCase getStoresUseCase;
-  List<Store> stores = [];
-  Set<Store> favoriteStores = {};
+  final List<Store> stores = [];
   bool loading = true;
   late final TabController _tabController;
 
@@ -28,18 +27,23 @@ class _StoreListScreenState extends State<StoreListScreen>
   Future<void> loadStores() async {
     final stores = await getStoresUseCase.call(widget.toolName);
     setState(() {
-      this.stores = stores;
+      this.stores.clear();
+      this.stores.addAll(stores);
       loading = false;
     });
   }
 
   void toggleFavorite(Store store) {
+    final isFavorite = store.isFavorite;
+    final changedStore = store.copyWith(isFavorite: !isFavorite);
     setState(() {
-      if (favoriteStores.contains(store)) {
-        favoriteStores.remove(store);
+      int index = stores.indexWhere((s) => s.storeId == store.storeId);
+      if (index >= 0) {
+        stores.removeAt(index);
       } else {
-        favoriteStores.add(store);
+        index = stores.length;
       }
+      stores.insert(index, changedStore);
     });
   }
 
@@ -51,6 +55,8 @@ class _StoreListScreenState extends State<StoreListScreen>
 
   @override
   Widget build(BuildContext context) {
+    final toolName = widget.toolName;
+    final favoriteCount = stores.where((s) => s.isFavorite).length;
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -94,7 +100,7 @@ class _StoreListScreenState extends State<StoreListScreen>
                     labelColor: Colors.black,
                     tabs: [
                       Tab(text: 'Missions (${stores.length})'),
-                      Tab(text: 'Favoris (${favoriteStores.length})'),
+                      Tab(text: 'Favoris ($favoriteCount)'),
                     ],
                   ),
                 ),
@@ -131,56 +137,72 @@ class _StoreListScreenState extends State<StoreListScreen>
                     child: TabBarView(
                       controller: _tabController,
                       children: [
-                        missionList(stores),
-                        favoriteList(),
+                        _StoreListView(
+                          toolName: toolName,
+                          items: stores,
+                          toggleFavorite: toggleFavorite,
+                        ),
+                        _StoreListView(
+                          toolName: toolName,
+                          items: stores,
+                          toggleFavorite: toggleFavorite,
+                          isFavorite: true,
+                        ),
                       ],
                     ),
                   ),
                 ],
               ));
   }
+}
 
-  Widget missionList(List<Store> stores) {
+class _StoreListView extends StatelessWidget {
+  const _StoreListView(
+      {super.key,
+      required this.toolName,
+      required this.items,
+      required this.toggleFavorite,
+      this.isFavorite = false});
+
+  final String toolName;
+
+  final List<Store> items;
+
+  final void Function(Store) toggleFavorite;
+
+  final bool isFavorite;
+
+  @override
+  Widget build(BuildContext context) {
+    final items = List<Store>.from(this.items);
+    if (isFavorite == true) {
+      items.removeWhere((element) => !element.isFavorite);
+    }
+    final itemCount = items.length;
+    if (items.isEmpty) {
+      return Center(
+        child: Text(
+          'Aucun élément trouvé',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
     return ListView.builder(
-      itemCount: stores.length,
       itemBuilder: (context, index) {
+        if (index >= itemCount) {
+          print('Current index $index');
+          return null;
+        }
+        final item = items.elementAt(index);
+        final isFavorite = item.isFavorite;
         return Column(
           children: [
             StoreCard(
-              store: stores[index],
-              toolName: widget.toolName,
-              isFavorite: favoriteStores.contains(stores[index]),
+              store: item,
+              toolName: toolName,
+              isFavorite: isFavorite,
               onFavoriteToggle: () {
-                toggleFavorite(stores[index]);
-              },
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 0, bottom: 0, left: 16, right: 0),
-              child: Divider(
-                height: 1,
-                thickness: 1,
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget favoriteList() {
-    return ListView.builder(
-      itemCount: favoriteStores.length,
-      itemBuilder: (context, index) {
-        return Column(
-          children: [
-            StoreCard(
-              store: favoriteStores.elementAt(index),
-              toolName: widget.toolName,
-              isFavorite: favoriteStores.contains(favoriteStores.elementAt(index)),
-              onFavoriteToggle: () {
-                toggleFavorite(favoriteStores.elementAt(index),);
+                toggleFavorite(item);
               },
             ),
             Padding(
