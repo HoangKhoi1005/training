@@ -31,112 +31,133 @@ class StoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      leading: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              store.logoPath,
+              width: 72,
+              height: 72,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 72,
+                  height: 72,
+                  color: Colors.grey[300],
+                  child: Icon(Icons.store, color: Colors.grey[600]),
+                );
+              },
+            ),
+          ),
+          if (store.notificationCount > 0)
+            Positioned(
+              right: -5,
+              top: -5,
+              child: Container(
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    '${store.notificationCount}',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            )
+        ],
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(
+              color: CategoryHelper.backgroundColor(store.category),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              CategoryHelper.label(store.category),
+              style: TextStyle(
+                fontSize: 12,
+                color: CategoryHelper.textColor(store.category),
+              ),
+            ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            store.name,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+      subtitle: Padding(
+        padding: EdgeInsets.only(top: 2.0),
+        child: Text(
+          store.address,
+          style: TextStyle(fontSize: 14),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.near_me,
+                size: 14,
+                color: Colors.grey[600],
+              ),
+              SizedBox(width: 2),
+              Text(
+                "${store.distanceKm.toStringAsFixed(1)} km",
+                style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+          InkWell(
+            onTap: onFavoriteToggle,
+            customBorder: CircleBorder(),
+            child: Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: Colors.purple,
+                size: 24,
+              ),
+            ),
+          ),
+        ],
+      ),
       onTap: () {
         onTap(context);
       },
-      child: Container(
-        height: 104,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    store.logoPath,
-                    width: 72,
-                    height: 72,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                if (store.notificationCount > 0)
-                  Positioned(
-                    right: -4,
-                    top: -4,
-                    child: Container(
-                      padding: const EdgeInsets.all(2),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          '${store.notificationCount}',
-                          style: const TextStyle(
-                              fontSize: 10, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  )
-              ],
-            ),
-            SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: CategoryHelper.backgroundColor(store.category),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      CategoryHelper.label(store.category),
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: CategoryHelper.textColor(store.category),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    store.name,
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.w600),
-                  ),
-                  Text(store.address, style: const TextStyle(fontSize: 15)),
-                ],
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.near_me,
-                      size: 16,
-                    ),
-                    SizedBox(width: 3),
-                    Text("${store.distanceKm.toStringAsFixed(2)} km",
-                        style: TextStyle(fontSize: 13)),
-                  ],
-                ),
-                SizedBox(height: 26),
-                GestureDetector(
-                  onTap: onFavoriteToggle,
-                  child: Icon(
-                    isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: Colors.purple,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

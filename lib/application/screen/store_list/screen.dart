@@ -15,36 +15,53 @@ class _StoreListScreenState extends State<StoreListScreen>
   final List<Store> stores = [];
   bool loading = true;
   late final TabController _tabController;
+  late final ApplicationManager _applicationManager;
+  late Future<List<Store>> _storesFuture;
 
   @override
   void initState() {
     super.initState();
+    _applicationManager = ApplicationManager();
     _tabController = TabController(length: 2, vsync: this);
     getStoresUseCase = GetStoresUseCase(storeRepository: StoreRepositoryImpl());
-    loadStores();
+    _storesFuture = _loadStoresAsync();
   }
 
-  Future<void> loadStores() async {
-    final stores = await getStoresUseCase.call(widget.toolName);
-    setState(() {
-      this.stores.clear();
-      this.stores.addAll(stores);
-      loading = false;
-    });
+    Future<List<Store>> _loadStoresAsync() async {
+    try {
+      return await getStoresUseCase.call(widget.toolName);
+    } catch (e) {
+      // FutureBuilder sẽ bắt lỗi này qua snapshot.hasError
+      print("Error loading stores in _loadStoresAsync: $e");
+      rethrow; // Ném lại lỗi để FutureBuilder xử lý
+    }
   }
+
+  // Future<void> loadStores() async {
+  //   final stores = await getStoresUseCase.call(widget.toolName);
+  //   setState(() {
+  //     this.stores.clear();
+  //     this.stores.addAll(stores);
+  //     loading = false;
+  //   });
+  // }
+
+  // void toggleFavorite(Store store) {
+  //   final isFavorite = store.isFavorite;
+  //   final changedStore = store.copyWith(isFavorite: !isFavorite);
+  //   setState(() {
+  //     int index = stores.indexWhere((s) => s.storeId == store.storeId);
+  //     if (index >= 0) {
+  //       stores.removeAt(index);
+  //     } else {
+  //       index = stores.length;
+  //     }
+  //     stores.insert(index, changedStore);
+  //   });
+  // }
 
   void toggleFavorite(Store store) {
-    final isFavorite = store.isFavorite;
-    final changedStore = store.copyWith(isFavorite: !isFavorite);
-    setState(() {
-      int index = stores.indexWhere((s) => s.storeId == store.storeId);
-      if (index >= 0) {
-        stores.removeAt(index);
-      } else {
-        index = stores.length;
-      }
-      stores.insert(index, changedStore);
-    });
+    _applicationManager.toggleStoreFavorite(store.storeId);
   }
 
   @override
@@ -55,104 +72,119 @@ class _StoreListScreenState extends State<StoreListScreen>
 
   @override
   Widget build(BuildContext context) {
-    final toolName = widget.toolName;
-    final favoriteCount = stores.where((s) => s.isFavorite).length;
-    return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          title: Row(
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Theme.of(context).primaryColor,
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              Expanded(
-                child: Container(
-                  height: 32,
-                  width: 268,
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFF0F0F0),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: TabBar(
-                    controller: _tabController,
-                    indicator: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(7),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 1,
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
+    return FutureBuilder<List<Store>>(
+      future: _storesFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(child: Text('Une erreur s\'est produite')),
+          );
+        }
+
+        final allStores = snapshot.data ?? [];
+
+        return ListenableBuilder(
+          listenable: _applicationManager,
+          builder: (context, _) {
+            final favoriteStores = _applicationManager.getFavoriteStores(allStores);
+
+            return Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.white,
+                title: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor),
+                      onPressed: () => Navigator.of(context).pop(),
                     ),
-                    dividerColor: Colors.transparent,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    labelColor: Colors.black,
-                    tabs: [
-                      Tab(text: 'Missions (${stores.length})'),
-                      Tab(text: 'Favoris ($favoriteCount)'),
-                    ],
-                  ),
+                    Expanded(
+                      child: Container(
+                        height: 32,
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF0F0F0),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TabBar(
+                          controller: _tabController,
+                          indicator: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(7),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          dividerColor: Colors.transparent,
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          labelColor: Colors.black,
+                          tabs: [
+                            Tab(text: 'Missions (${allStores.length})'),
+                            Tab(text: 'Favoris (${favoriteStores.length})'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {}, // TODO: implement search
+                      icon: Icon(Icons.search, color: Theme.of(context).primaryColor, size: 32),
+                    ),
+                  ],
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.search,
-                  color: Theme.of(context).primaryColor,
-                  size: 32,
-                ),
-              ),
-            ],
-          ),
-        ),
-        body: loading
-            ? Center(child: CircularProgressIndicator())
-            : Column(
+              body: Column(
                 children: [
-                  SizedBox(height: 14),
+                  const SizedBox(height: 14),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 16),
                       child: Text(
                         'Outil ${widget.toolName}',
-                        style: TextStyle(
-                            fontSize: 28, fontWeight: FontWeight.w700),
+                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                       ),
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Expanded(
                     child: TabBarView(
                       controller: _tabController,
                       children: [
                         _StoreListView(
-                          toolName: toolName,
-                          items: stores,
+                          toolName: widget.toolName,
+                          items: allStores,
                           toggleFavorite: toggleFavorite,
+                          isFavorite: false,
+                          applicationManager: _applicationManager,
                         ),
                         _StoreListView(
-                          toolName: toolName,
-                          items: stores,
+                          toolName: widget.toolName,
+                          items: allStores,
                           toggleFavorite: toggleFavorite,
                           isFavorite: true,
+                          applicationManager: _applicationManager,
                         ),
                       ],
                     ),
                   ),
                 ],
-              ));
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
 
@@ -162,7 +194,8 @@ class _StoreListView extends StatelessWidget {
       required this.toolName,
       required this.items,
       required this.toggleFavorite,
-      this.isFavorite = false});
+      this.isFavorite = false,
+      required this.applicationManager});
 
   final String toolName;
 
@@ -172,11 +205,15 @@ class _StoreListView extends StatelessWidget {
 
   final bool isFavorite;
 
+  final ApplicationManager applicationManager;
+
   @override
   Widget build(BuildContext context) {
-    final items = List<Store>.from(this.items);
+    var items = List<Store>.from(this.items);
     if (isFavorite == true) {
-      items.removeWhere((element) => !element.isFavorite);
+      items = items
+          .where((store) => applicationManager.isStoreFavorite(store.storeId))
+          .toList();
     }
     final itemCount = items.length;
     if (items.isEmpty) {
@@ -194,7 +231,7 @@ class _StoreListView extends StatelessWidget {
           return null;
         }
         final item = items.elementAt(index);
-        final isFavorite = item.isFavorite;
+        final isFavorite = applicationManager.isStoreFavorite(item.storeId);
         return Column(
           children: [
             StoreCard(

@@ -71,4 +71,23 @@ final class ApplicationManager extends ChangeNotifier implements MyApplication {
   }
 
   final favoriteButtonNotifier = ValueNotifier(true);
+
+  final Set<int> _favoriteStoreIds = {};
+
+  bool isStoreFavorite(int storeId) {
+    return _favoriteStoreIds.contains(storeId);
+  }
+
+  void toggleStoreFavorite(int storeId) {
+    if (_favoriteStoreIds.contains(storeId)) {
+      _favoriteStoreIds.remove(storeId);
+    } else {
+      _favoriteStoreIds.add(storeId);
+    }
+    notifyListeners();
+  }
+
+  List<Store> getFavoriteStores(List<Store> allStores) {
+    return allStores.where((store) => isStoreFavorite(store.storeId)).toList();
+  }
 }
