@@ -22,6 +22,7 @@ part 'screen/forgot_password/screen.dart';
 part 'screen/sign_up/screen.dart';
 part 'screen/store_list/widget/category_helper.dart';
 part 'screen/store_list/widget/store_card.dart';
+part 'screen/store_list/widget/store_list_view.dart';
 part 'screen/store_list/screen.dart';
 part 'screen/store_prix_detail/widget/mission_card.dart';
 part 'screen/store_prix_detail/screen.dart';

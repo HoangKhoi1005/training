@@ -85,8 +85,8 @@ class StoreCard extends StatelessWidget {
         ],
       ),
       title: Column(
+        mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -140,7 +140,7 @@ class StoreCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 2),
           InkWell(
             onTap: onFavoriteToggle,
             customBorder: CircleBorder(),

@@ -90,4 +90,9 @@ final class ApplicationManager extends ChangeNotifier implements MyApplication {
   List<Store> getFavoriteStores(List<Store> allStores) {
     return allStores.where((store) => isStoreFavorite(store.storeId)).toList();
   }
+
+  void addFavoriteStore(Store store) {
+    _favoriteStoreIds.add(store.storeId);
+    notifyListeners();
+  }
 }

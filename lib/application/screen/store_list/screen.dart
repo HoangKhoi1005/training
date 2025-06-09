@@ -27,13 +27,12 @@ class _StoreListScreenState extends State<StoreListScreen>
     _storesFuture = _loadStoresAsync();
   }
 
-    Future<List<Store>> _loadStoresAsync() async {
+  Future<List<Store>> _loadStoresAsync() async {
     try {
       return await getStoresUseCase.call(widget.toolName);
     } catch (e) {
-      // FutureBuilder sẽ bắt lỗi này qua snapshot.hasError
       print("Error loading stores in _loadStoresAsync: $e");
-      rethrow; // Ném lại lỗi để FutureBuilder xử lý
+      rethrow;
     }
   }
 
@@ -92,7 +91,8 @@ class _StoreListScreenState extends State<StoreListScreen>
         return ListenableBuilder(
           listenable: _applicationManager,
           builder: (context, _) {
-            final favoriteStores = _applicationManager.getFavoriteStores(allStores);
+            final favoriteStores =
+                _applicationManager.getFavoriteStores(allStores);
 
             return Scaffold(
               appBar: AppBar(
@@ -101,7 +101,8 @@ class _StoreListScreenState extends State<StoreListScreen>
                 title: Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor),
+                      icon: Icon(Icons.arrow_back_ios,
+                          color: Theme.of(context).primaryColor),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                     Expanded(
@@ -137,8 +138,9 @@ class _StoreListScreenState extends State<StoreListScreen>
                       ),
                     ),
                     IconButton(
-                      onPressed: () {}, // TODO: implement search
-                      icon: Icon(Icons.search, color: Theme.of(context).primaryColor, size: 32),
+                      onPressed: () {},
+                      icon: Icon(Icons.search,
+                          color: Theme.of(context).primaryColor, size: 32),
                     ),
                   ],
                 ),
@@ -152,7 +154,8 @@ class _StoreListScreenState extends State<StoreListScreen>
                       padding: const EdgeInsets.only(left: 16),
                       child: Text(
                         'Outil ${widget.toolName}',
-                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
+                        style: const TextStyle(
+                            fontSize: 28, fontWeight: FontWeight.w700),
                       ),
                     ),
                   ),
@@ -161,14 +164,14 @@ class _StoreListScreenState extends State<StoreListScreen>
                     child: TabBarView(
                       controller: _tabController,
                       children: [
-                        _StoreListView(
+                        StoreListView(
                           toolName: widget.toolName,
                           items: allStores,
                           toggleFavorite: toggleFavorite,
                           isFavorite: false,
                           applicationManager: _applicationManager,
                         ),
-                        _StoreListView(
+                        StoreListView(
                           toolName: widget.toolName,
                           items: allStores,
                           toggleFavorite: toggleFavorite,
@@ -182,76 +185,6 @@ class _StoreListScreenState extends State<StoreListScreen>
               ),
             );
           },
-        );
-      },
-    );
-  }
-}
-
-class _StoreListView extends StatelessWidget {
-  const _StoreListView(
-      {super.key,
-      required this.toolName,
-      required this.items,
-      required this.toggleFavorite,
-      this.isFavorite = false,
-      required this.applicationManager});
-
-  final String toolName;
-
-  final List<Store> items;
-
-  final void Function(Store) toggleFavorite;
-
-  final bool isFavorite;
-
-  final ApplicationManager applicationManager;
-
-  @override
-  Widget build(BuildContext context) {
-    var items = List<Store>.from(this.items);
-    if (isFavorite == true) {
-      items = items
-          .where((store) => applicationManager.isStoreFavorite(store.storeId))
-          .toList();
-    }
-    final itemCount = items.length;
-    if (items.isEmpty) {
-      return Center(
-        child: Text(
-          'Aucun élément trouvé',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),
-      );
-    }
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        if (index >= itemCount) {
-          print('Current index $index');
-          return null;
-        }
-        final item = items.elementAt(index);
-        final isFavorite = applicationManager.isStoreFavorite(item.storeId);
-        return Column(
-          children: [
-            StoreCard(
-              store: item,
-              toolName: toolName,
-              isFavorite: isFavorite,
-              onFavoriteToggle: () {
-                toggleFavorite(item);
-              },
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 0, bottom: 0, left: 16, right: 0),
-              child: Divider(
-                height: 1,
-                thickness: 1,
-                color: Colors.grey,
-              ),
-            ),
-          ],
         );
       },
     );

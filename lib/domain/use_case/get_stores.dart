@@ -1,6 +1,6 @@
 part of my_domain;
 
-final class GetStoresUseCase {
+class GetStoresUseCase {
   final StoreRepository storeRepository;
 
   const GetStoresUseCase({required this.storeRepository});
