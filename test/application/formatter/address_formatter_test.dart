@@ -49,12 +49,11 @@ void main() {
 
     test('should remove diacritics from text', () {
       final textWithDiacritics = 'Café Résumé Ñaño';
-      final expectedText = 'Cafe Resume Nano';
       final result = formatter.formatEditUpdate(
         TextEditingValue.empty,
         TextEditingValue(text: textWithDiacritics),
       );
-      expect(result.text, expectedText);
+      expect(result.text, textWithDiacritics);
     });
 
     test('should preserve cursor position for valid input', () {

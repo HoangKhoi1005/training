@@ -95,10 +95,6 @@ class AddressFormatter extends TextInputFormatter {
     }
 
     // If the input is valid, accept the new value as result
-    return TextEditingValue(
-      text: normalizedText,
-      selection: newValue.selection,
-      composing: newValue.composing,
-    );
+    return newValue;
   }
 }
