@@ -33,3 +33,4 @@ part 'use_case/sign_up.dart';
 part 'application.dart';
 
 part 'domain.freezed.dart';
+part 'domain.g.dart';

@@ -3,12 +3,16 @@ library application;
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:training/data/data.dart';
 import 'package:training/domain/domain.dart';
 
 part 'application.g.dart';
+
+part 'formatter/address_formatter.dart';
 
 part 'navigation/dashboard.dart';
 part 'navigation/onboarding.dart';

@@ -41,6 +41,7 @@ dependencies:
   mocktail: ^1.0.4
   freezed_annotation: ^3.0.0
   freezed: ^3.0.6
+  diacritic: ^0.1.6
 
 dev_dependencies:
   flutter_test:

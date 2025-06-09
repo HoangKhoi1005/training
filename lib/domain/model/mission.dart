@@ -1,19 +1,25 @@
 part of my_domain;
 
+@JsonSerializable()
 @freezed
 interface class Mission with _$Mission {
+  @JsonKey(name: 'name')
   @override
   final String name;
 
+  @JsonKey(name: 'created_at')
   @override
   final DateTime createdAt;
 
+  @JsonKey(name: 'end_at')
   @override
   final DateTime endAt;
 
+  @JsonKey(name: 'status')
   @override
   final MissionStatus status;
 
+  @JsonKey(name: 'sending_count')
   @override
   final int sendingCount;
 
@@ -25,26 +31,9 @@ interface class Mission with _$Mission {
     required this.sendingCount,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'createdAt': createdAt.toIso8601String(),
-      'endAt': endAt.toIso8601String(),
-      'status': status.toString(),
-      'sendingCount': sendingCount,
-    };
-  }
+  Map<String, dynamic> toJson() => _$MissionToJson(this);
 
   factory Mission.fromJson(Map<String, dynamic> json) {
-    return Mission(
-      name: json['name'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      endAt: DateTime.parse(json['endAt'] as String),
-      status: MissionStatus.values.firstWhere(
-        (e) => e.toString() == json['status'],
-        orElse: () => MissionStatus.disponible,
-      ),
-      sendingCount: json['sendingCount'] as int,
-    );
+    return _$MissionFromJson(json);
   }
 }
