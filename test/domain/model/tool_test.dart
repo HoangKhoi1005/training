@@ -23,7 +23,7 @@ void main() {
         final t1 = Tool(title: title, iconPath: iconPath);
         final t2 = Tool(title: title, iconPath: iconPath);
 
-        expect(t1, t2);
+        expect(t1, equals(t2));
       });
 
       test('should not be equal when title differs', () {

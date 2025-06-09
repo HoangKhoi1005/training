@@ -1,7 +1,11 @@
 part of my_domain;
 
-interface class Tool {
+@freezed
+interface class Tool with _$Tool {
+  @override
   final String title;
+
+  @override
   final String iconPath;
 
   const Tool({
@@ -9,13 +13,10 @@ interface class Tool {
     required this.iconPath,
   });
 
-  Tool copyWith({
-    String? title,
-    String? iconPath,
-  }) {
+  factory Tool.fromJson(Map<String, dynamic> json) {
     return Tool(
-      title: title ?? this.title,
-      iconPath: iconPath ?? this.iconPath,
+      title: json['title'] as String,
+      iconPath: json['iconPath'] as String,
     );
   }
 
@@ -24,12 +25,5 @@ interface class Tool {
       'title': title,
       'iconPath': iconPath,
     };
-  }
-
-  factory Tool.fromJson(Map<String, dynamic> json) {
-    return Tool(
-      title: json['title'] as String,
-      iconPath: json['iconPath'] as String,
-    );
   }
 }

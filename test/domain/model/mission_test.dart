@@ -105,7 +105,7 @@ void main() {
           name: name,
           createdAt: createdAt,
           endAt: endAt,
-          status: status,
+          status: MissionStatus.enCours,
           sendingCount: sendingCount,
         );
         final m2 = Mission(

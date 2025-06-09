@@ -1,10 +1,20 @@
 part of my_domain;
 
-class Mission {
+@freezed
+interface class Mission with _$Mission {
+  @override
   final String name;
+
+  @override
   final DateTime createdAt;
+
+  @override
   final DateTime endAt;
+
+  @override
   final MissionStatus status;
+
+  @override
   final int sendingCount;
 
   const Mission({
@@ -14,22 +24,6 @@ class Mission {
     required this.status,
     required this.sendingCount,
   });
-
-  Mission copyWith({
-    String? name,
-    DateTime? createdAt,
-    DateTime? endAt,
-    MissionStatus? status,
-    int? sendingCount,
-  }) {
-    return Mission(
-      name: name ?? this.name,
-      createdAt: createdAt ?? this.createdAt,
-      endAt: endAt ?? this.endAt,
-      status: status ?? this.status,
-      sendingCount: sendingCount ?? this.sendingCount,
-    );
-  }
 
   Map<String, dynamic> toJson() {
     return {

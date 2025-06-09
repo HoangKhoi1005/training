@@ -1,5 +1,7 @@
 library my_domain;
 
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'action/validate_email.dart';
 part 'action/validate_password.dart';
 part 'action/validate_user_name.dart';
@@ -29,3 +31,5 @@ part 'use_case/login.dart';
 part 'use_case/sign_up.dart';
 
 part 'application.dart';
+
+part 'domain.freezed.dart';
